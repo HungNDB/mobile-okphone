@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:okphone/screens/posts-screen.dart';
 import 'package:provider/provider.dart';
-import 'Api/api.dart';
+
 import 'provider/postProvider.dart';
-import 'models/post.dart';
-import 'screens/posts-screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -35,9 +34,6 @@ class _MyAppState extends State<MyApp> {
           canvasColor: Colors.white,
         ),
         home: PostScreen(),
-        routes: {
-          PostScreen.routeName: (ctx) => PostScreen(),
-        },
       ),
     );
   }

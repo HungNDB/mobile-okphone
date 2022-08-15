@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class ReponseData {
   ReponseData({
     this.isSuccess,
@@ -19,7 +21,7 @@ class ReponseData {
       );
 }
 
-class Post {
+class Post with ChangeNotifier {
   Post({
     this.id,
     this.userName,
@@ -43,7 +45,7 @@ class Post {
   String? brandName;
   String? title;
   String? phoneName;
-  int? price;
+  double? price;
   String? color;
   dynamic? memory;
   String? description;

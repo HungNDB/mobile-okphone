@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:okphone/Api/api.dart';
 
-import '../models/post.dart';
+import '../Models/post.dart';
+
 
 class PostsProvider with ChangeNotifier {
   List<Post> _postList = [];
@@ -17,7 +17,7 @@ class PostsProvider with ChangeNotifier {
     return [..._postList];
   }
 
-  List<Post> get leagueMatches {
+  List<Post> get postList {
     return [..._postList];
   }
 
@@ -29,13 +29,13 @@ class PostsProvider with ChangeNotifier {
   Future<List<Post>> fetchPost() async {
     var options = BaseOptions(
       baseUrl:
-          "http://okphonewebapi-dev-fu.ap-southeast-1.elasticbeanstalk.com/api/",
+      "http://okphonewebapi-dev-fu.ap-southeast-1.elasticbeanstalk.com/api/",
     );
     try {
       Dio dio = Dio(options);
       dio.interceptors.add(DioCacheManager(CacheConfig(
-              baseUrl:
-                  "http://okphonewebapi-dev-fu.ap-southeast-1.elasticbeanstalk.com/api/"))
+          baseUrl:
+          "http://okphonewebapi-dev-fu.ap-southeast-1.elasticbeanstalk.com/api/"))
           .interceptor);
       var response = await dio.get('/post/user/get',
           options: buildCacheOptions(
@@ -44,6 +44,7 @@ class PostsProvider with ChangeNotifier {
             forceRefresh: true,
           ));
       if (response.statusCode == 200) {
+        print(response.data);
         _postList = parsePagePost(response.data)!;
         return _postList;
         //notifyListeners();

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:okphone/screens/posts-list-view.dart';
 import 'package:provider/provider.dart';
 
-import '../provider/postprovider.dart';
+import '../provider/postProvider.dart';
+
 
 class PostScreen extends StatefulWidget {
   static const routeName = '/posts-screen';
@@ -42,8 +43,8 @@ class _PostScreenState extends State<PostScreen> {
     return Scaffold(
       body: _isLoading
           ? Center(
-              child: CircularProgressIndicator(),
-            )
+        child: CircularProgressIndicator(),
+      )
           : PostListView(),
     );
   }
