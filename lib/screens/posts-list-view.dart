@@ -42,7 +42,7 @@ class _PostListViewState extends State<PostListView> {
   //   Provider.of<PostsProvider>(context, listen: false).changeSearchString(search);
   // }
 
-  Future<void> _refreshPosts(BuildContext context) async {
+  Future<void> _refreshMatches(BuildContext context) async {
     await Provider.of<PostsProvider>(context, listen: false).fetchPost();
   }
 
@@ -55,10 +55,10 @@ class _PostListViewState extends State<PostListView> {
     final posts = postsProvider.postList;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Okphone ;3'),
+        title: Text('Helloo OkPhone'),
       ),
       body: RefreshIndicator(
-        onRefresh: () => _refreshPosts(context),
+        onRefresh: () => _refreshMatches(context),
         child: Column(
           children: [
             Container(
@@ -85,7 +85,7 @@ class _PostListViewState extends State<PostListView> {
                           },
                         )
                       : null,
-                  hintText: 'search...',
+                  hintText: 'search ...',
                   hintStyle: style,
                   border: InputBorder.none,
                 ),
@@ -96,15 +96,27 @@ class _PostListViewState extends State<PostListView> {
             posts.length == 0
                 ? Center(
                     child: Text(
-                      'Phone Not Found',
+                      'Post Not Found',
                       style: TextStyle(color: Colors.red),
                     ),
                   )
                 : Expanded(
-                    child: ListView.builder(
+                    child: GridView.builder(
+                      padding: const EdgeInsets.all(10),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: MediaQuery.of(context).size.width /
+                            (MediaQuery.of(context).size.height / 1.2),
+                        mainAxisSpacing: 15.0,
+                        crossAxisSpacing: 15.0,
+                      ),
                       itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
                         value: posts[index],
-                        child: PostItem(),
+                        child: PostItem(
+                            // id: products[index].id,
+                            // title: products[index].title,
+                            // imageUrl: products[index].imageUrl,
+                            ),
                       ),
                       itemCount: posts.length,
                     ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:okphone/screens/cart-screen.dart';
+import 'package:okphone/screens/product_list.dart';
 
 class BottomBar extends StatelessWidget {
   @override
@@ -25,8 +27,16 @@ class BottomBar extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Icon(Icons.home, color: Color(0xFFEF7532)),
-                          Icon(Icons.person_outline, color: Color(0xFF676E79))
+                          new IconButton(
+                            icon:
+                                new Icon(Icons.home, color: Color(0xFFEF7532)),
+                            onPressed: () {/* Your code */},
+                          ),
+                          new IconButton(
+                            icon: new Icon(Icons.person_outline_sharp,
+                                color: Color.fromARGB(255, 9, 9, 9)),
+                            onPressed: () {},
+                          )
                         ],
                       )),
                   Container(
@@ -35,8 +45,24 @@ class BottomBar extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
-                          Icon(Icons.wallet, color: Color(0xFF676E79)),
-                          Icon(Icons.shopping_basket, color: Color(0xFF676E79))
+                          new IconButton(
+                            icon: new Icon(Icons.wallet,
+                                color: Color(0xFF676E79)),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                ProductList.routeName,
+                              );
+                            },
+                          ),
+                          new IconButton(
+                            icon: new Icon(Icons.shopping_basket,
+                                color: Color(0xFF676E79)),
+                            onPressed: () {
+                              Navigator.of(context).pushNamed(
+                                CartScreen.routeName,
+                              );
+                            },
+                          )
                         ],
                       )),
                 ])));

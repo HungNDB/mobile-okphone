@@ -1,13 +1,59 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_typing_uninitialized_variables
 
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../db-helper/dbHelper.dart';
+import '../models/cart.dart';
+import '../provider/cardProvider.dart';
 import 'bottom_bar.dart';
 
+// ignore: must_be_immutable
 class PostDetail extends StatelessWidget {
-  final assetPath, postPrice, postName;
+  final assetPath, postPrice, postName, description, userName, id;
+  final DBHelper dbHelper = DBHelper();
+  PostDetail({
+    this.assetPath,
+    this.postPrice,
+    this.postName,
+    this.description,
+    this.userName,
+    this.id,
+  });
 
-  PostDetail({this.assetPath, this.postPrice, this.postName});
   @override
   Widget build(BuildContext context) {
+    final cart = Provider.of<CartProvider>(context);
+
+    void saveData(String userName, String phoneName, String price,
+        String imageUrl, String id) {
+      var myPrice = int.parse(price);
+      assert(myPrice is int);
+      var myId = int.parse(id);
+      assert(myId is int);
+
+      DBHelper()
+          .insert(
+        Cart(
+          id: myId,
+          productId: "$myId",
+          productName: phoneName,
+          initialPrice: myPrice,
+          productPrice: myPrice,
+          quantity: ValueNotifier(1),
+          unitTag: "cai",
+          image: imageUrl,
+        ),
+      )
+          .then((value) {
+        cart.addTotalPrice(myPrice.toDouble());
+        cart.addCounter();
+        print('Product Added to cart');
+      }).onError((error, stackTrace) {
+        print(" vcc dell chay dc");
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -19,7 +65,7 @@ class PostDetail extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: Text('Pickup',
+        title: const Text('Pickup',
             style: TextStyle(
                 fontFamily: 'Varela',
                 fontSize: 20.0,
@@ -33,33 +79,33 @@ class PostDetail extends StatelessWidget {
       ),
       body: ListView(children: [
         SizedBox(height: 15.0),
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(left: 20.0),
-          child: Text('Cookie',
+          child: Text('Phone Details',
               style: TextStyle(
                   fontFamily: 'Varela',
                   fontSize: 42.0,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFF17532))),
         ),
-        SizedBox(height: 20.0),
+        SizedBox(height: 30.0),
         Hero(
             tag: assetPath,
-            child: Image.asset(assetPath,
+            child: Image.network(assetPath,
                 height: 200.0, width: 150.0, fit: BoxFit.contain)),
         SizedBox(height: 20.0),
         Center(
-          child: Text(postPrice,
-              style: TextStyle(
+          child: Text(postPrice + " vnd",
+              style: const TextStyle(
                   fontFamily: 'Varela',
                   fontSize: 22.0,
                   fontWeight: FontWeight.bold,
                   color: Color(0xFFF17532))),
         ),
-        SizedBox(height: 10.0),
+        SizedBox(height: 12.0),
         Center(
           child: Text(postName,
-              style: TextStyle(
+              style: const TextStyle(
                   color: Color(0xFF575E67),
                   fontFamily: 'Varela',
                   fontSize: 24.0)),
@@ -68,9 +114,9 @@ class PostDetail extends StatelessWidget {
         Center(
           child: Container(
             width: MediaQuery.of(context).size.width - 50.0,
-            child: Text('Phone Type',
+            child: Text(description,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'Varela',
                     fontSize: 16.0,
                     color: Color(0xFFB4B8B9))),
@@ -79,25 +125,37 @@ class PostDetail extends StatelessWidget {
         SizedBox(height: 20.0),
         Center(
             child: Container(
-                width: MediaQuery.of(context).size.width - 50.0,
+                width: MediaQuery.of(context).size.width - 40.0,
                 height: 50.0,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25.0),
                     color: Color(0xFFF17532)),
-                child: Center(
-                    child: Text(
-                  'Add to cart',
-                  style: TextStyle(
-                      fontFamily: 'Varela',
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ))))
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Color.fromARGB(255, 241, 137, 1)),
+                    onPressed: () {
+                      saveData(
+                        postName,
+                        postName,
+                        postPrice,
+                        assetPath,
+                        id,
+                      );
+                    },
+                    child: const Text(
+                      'Add to cart',
+                      style: TextStyle(
+                          fontFamily: 'Varela',
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    )))),
+        SizedBox(height: 20.0)
       ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         backgroundColor: Color(0xFFF17532),
-        child: Icon(Icons.fastfood),
+        child: Icon(Icons.phone_android_rounded),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomBar(),
